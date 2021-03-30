@@ -1508,8 +1508,7 @@ void CrealityDWINClass::Menu_Item_Handler(uint8_t menu, uint8_t item, bool draw/
       #define CONTROL_BACK 0
       #define CONTROL_TEMP (CONTROL_BACK + 1)
       #define CONTROL_MOTION (CONTROL_TEMP + 1)
-      #define CONTROL_BRIGHTNESS (CONTROL_MOTION + 1)
-      #define CONTROL_ADVANCED (CONTROL_BRIGHTNESS + 1)
+      #define CONTROL_ADVANCED (CONTROL_MOTION + 1)
       #define CONTROL_SAVE (CONTROL_ADVANCED + ENABLED(EEPROM_SETTINGS))
       #define CONTROL_RESTORE (CONTROL_SAVE + ENABLED(EEPROM_SETTINGS))
       #define CONTROL_RESET (CONTROL_RESTORE + ENABLED(EEPROM_SETTINGS))
@@ -1539,15 +1538,6 @@ void CrealityDWINClass::Menu_Item_Handler(uint8_t menu, uint8_t item, bool draw/
           }
           else {
             Draw_Menu(Motion);
-          }
-          break;
-        case CONTROL_BRIGHTNESS:
-          if (draw) {
-            Draw_Menu_Item(row, ICON_Brightness, (char*)"LCD Brightness");
-            Draw_Float(ui.brightness, row, false, 1);
-          }
-          else {
-            Modify_Value(ui.brightness, 1, MAX_LCD_BRIGHTNESS, 1);
           }
           break;
         case CONTROL_ADVANCED:
@@ -2275,7 +2265,8 @@ void CrealityDWINClass::Menu_Item_Handler(uint8_t menu, uint8_t item, bool draw/
     case Advanced:
 
       #define ADVANCED_BACK 0
-      #define ADVANCED_XOFFSET (ADVANCED_BACK + ENABLED(HAS_BED_PROBE))
+      #define ADVANCED_BRIGHTNESS (ADVANCED_BACK + 1)
+      #define ADVANCED_XOFFSET (ADVANCED_BRIGHTNESS + ENABLED(HAS_BED_PROBE))
       #define ADVANCED_YOFFSET (ADVANCED_XOFFSET + ENABLED(HAS_BED_PROBE))
       #define ADVANCED_LOAD (ADVANCED_YOFFSET + ENABLED(ADVANCED_PAUSE_FEATURE))
       #define ADVANCED_UNLOAD (ADVANCED_LOAD + ENABLED(ADVANCED_PAUSE_FEATURE))
@@ -2293,6 +2284,15 @@ void CrealityDWINClass::Menu_Item_Handler(uint8_t menu, uint8_t item, bool draw/
           }
           else {
             Draw_Menu(Control, CONTROL_ADVANCED);
+          }
+          break;
+        case ADVANCED_BRIGHTNESS:
+          if (draw) {
+            Draw_Menu_Item(row, ICON_Brightness, (char*)"LCD Brightness");
+            Draw_Float(ui.brightness, row, false, 1);
+          }
+          else {
+            Modify_Value(ui.brightness, 1, MAX_LCD_BRIGHTNESS, 1);
           }
           break;
         #if ENABLED(HAS_BED_PROBE)
@@ -2973,8 +2973,7 @@ void CrealityDWINClass::Menu_Item_Handler(uint8_t menu, uint8_t item, bool draw/
     case Tune:
 
       #define TUNE_BACK 0
-      #define TUNE_BACKLIGHT_OFF (TUNE_BACK + 1)
-      #define TUNE_SPEED (TUNE_BACKLIGHT_OFF + 1)
+      #define TUNE_SPEED (TUNE_BACK + 1)
       #define TUNE_FLOW (TUNE_SPEED + ENABLED(HAS_HOTEND))
       #define TUNE_HOTEND (TUNE_FLOW + ENABLED(HAS_HOTEND))
       #define TUNE_BED (TUNE_HOTEND + ENABLED(HAS_HEATED_BED))
@@ -2984,7 +2983,8 @@ void CrealityDWINClass::Menu_Item_Handler(uint8_t menu, uint8_t item, bool draw/
       #define TUNE_ZDOWN (TUNE_ZUP + ENABLED(HAS_ZOFFSET_ITEM))
       #define TUNE_CHANGEFIL (TUNE_ZDOWN + ENABLED(FILAMENT_LOAD_UNLOAD_GCODES))
       #define TUNE_FILSENSORENABLED (TUNE_CHANGEFIL + ENABLED(FILAMENT_RUNOUT_SENSOR))
-      #define TUNE_TOTAL TUNE_FILSENSORENABLED
+      #define TUNE_BACKLIGHT_OFF (TUNE_FILSENSORENABLED + 1)
+      #define TUNE_TOTAL TUNE_BACKLIGHT_OFF
 
       switch (item) {
         case TUNE_BACK:
@@ -2993,16 +2993,6 @@ void CrealityDWINClass::Menu_Item_Handler(uint8_t menu, uint8_t item, bool draw/
           }
           else {
             Draw_Print_Screen();
-          }
-          break;
-        case TUNE_BACKLIGHT_OFF:
-          if (draw) {
-            Draw_Menu_Item(row, ICON_Backlight_Off, (char*)"Turn LCD Backlight Off");
-          }
-          else {
-            DWIN_Backlight_SetLuminance(0);
-            Popup_Handler(BacklightOff);
-            last_brightness = 0;
           }
           break;
         case TUNE_SPEED:
@@ -3118,6 +3108,16 @@ void CrealityDWINClass::Menu_Item_Handler(uint8_t menu, uint8_t item, bool draw/
             }
             break;
         #endif
+        case TUNE_BACKLIGHT_OFF:
+          if (draw) {
+            Draw_Menu_Item(row, ICON_Backlight_Off, (char*)"Turn LCD Backlight Off");
+          }
+          else {
+            DWIN_Backlight_SetLuminance(0);
+            Popup_Handler(BacklightOff);
+            last_brightness = 0;
+          }
+          break;
       }
       break;
     case PreheatHotend:
