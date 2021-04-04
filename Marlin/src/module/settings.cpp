@@ -994,7 +994,7 @@ void MarlinSettings::postprocess() {
       _FIELD_TEST(lcd_brightness);
 
       const uint8_t lcd_brightness =
-        #if ENABLED(CREALITY_DWIN_EXTUI)
+        #if HAS_LCD_BRIGHTNESS
           ui.brightness
         #else
           255
@@ -1882,9 +1882,7 @@ void MarlinSettings::postprocess() {
         uint8_t lcd_brightness;
         EEPROM_READ(lcd_brightness);
         if (!validating) {
-          #if ENABLED(CREALITY_DWIN_EXTUI)
-            ui.set_brightness(lcd_brightness);
-          #endif
+          TERN_(HAS_LCD_BRIGHTNESS, ui.set_brightness(lcd_brightness));
         }
       }
 
@@ -2905,10 +2903,7 @@ void MarlinSettings::reset() {
   //
   // LCD Brightness
   //
-
-  #if ENABLED(CREALITY_DWIN_EXTUI)
-    ui.set_brightness(DEFAULT_LCD_BRIGHTNESS);
-  #endif
+  TERN_(HAS_LCD_BRIGHTNESS, ui.set_brightness(DEFAULT_LCD_BRIGHTNESS));
 
   //
   // Controller Fan

@@ -228,7 +228,7 @@ public:
     }
   #endif
 
-  #if ENABLED(CREALITY_DWIN_EXTUI)
+  #if HAS_LCD_BRIGHTNESS
     static uint8_t brightness;
     static void set_brightness(const uint8_t value);
     FORCE_INLINE static void refresh_brightness() { set_brightness(brightness); }

@@ -692,7 +692,7 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
         case 250: M250(); break;                                  // M250: Set LCD contrast
       #endif
 
-      #if ENABLED(CREALITY_DWIN_EXTUI)
+      #if HAS_LCD_BRIGHTNESS
         case 251: M251(); break;                                  // M251: Set LCD brightness
       #endif
 
